@@ -4,13 +4,13 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/home";
-import Item from "./pages/item";
+import Item from "./pages/orders";
 import Routing from "./routes/routing";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 
 function App() {
-  const theme = createTheme();
+  const theme = createTheme({ direction: "rtl" });
 
   return (
     <>

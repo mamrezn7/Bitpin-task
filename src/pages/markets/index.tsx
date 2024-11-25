@@ -1,8 +1,10 @@
 import { Box, Card, Grid2, Tab, Tabs, Pagination } from "@mui/material";
+import SwipeableViews from "react-swipeable-views";
 import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import { Market } from "../../types/markets.type";
-import MarketItem from "../../components/shared/market/market-item";
+import MarketItem from "../../components/market/market-item";
+import { useNavigate } from "react-router-dom";
 
 type CurrencyCode = "IRT" | "USDT";
 
@@ -13,6 +15,7 @@ const Markets = () => {
   const [currentPage, setCurrentPage] = useState<{ IRT: number; USDT: number }>(
     { IRT: 1, USDT: 1 }
   );
+  const navigate = useNavigate();
 
   const itemsPerPage = 10;
 
@@ -26,6 +29,10 @@ const Markets = () => {
   ) => {
     const currency = value === 0 ? "IRT" : "USDT";
     setCurrentPage((prev) => ({ ...prev, [currency]: page }));
+  };
+
+  const handleSwipeChange = (index: 0 | 1) => {
+    setValue(index);
   };
 
   function a11yProps(currency: CurrencyCode) {
@@ -66,36 +73,69 @@ const Markets = () => {
     currentPage[currentTab] * itemsPerPage
   );
 
+  const handleViewMarketData = (val: number) => {
+    navigate({ pathname: "orders", search: `id=${val}` });
+  };
+
   return (
-    <>
+    <div dir="ltr">
       <Tabs
         value={value}
         onChange={handleChange}
         aria-label="basic tabs example"
+        variant="fullWidth"
       >
         <Tab label="IRT" {...a11yProps("IRT")} />
         <Tab label="USDT" {...a11yProps("USDT")} />
       </Tabs>
 
-      <Grid2 container spacing={1}>
-        {paginatedData.map((market) => (
-          <Grid2 key={market.id} size={{ xs: 12, sm: 6, lg: 4 }}>
-            <MarketItem item={market} />
+      <SwipeableViews index={value} onChangeIndex={handleSwipeChange}>
+        {/* Tab Panel 1 */}
+        <Box>
+          <Grid2 container spacing={1}>
+            {paginatedData.map((market) => (
+              <Grid2 key={market.id} size={{ xs: 12, sm: 6, lg: 4 }}>
+                <MarketItem
+                  item={market}
+                  onClick={() => handleViewMarketData(market.id)}
+                />
+              </Grid2>
+            ))}
           </Grid2>
-        ))}
-      </Grid2>
-
-      {filteredData.length > itemsPerPage && (
-        <Box display="flex" justifyContent="center" mt={2}>
-          <Pagination
-            count={totalPages}
-            page={currentPage[currentTab]}
-            onChange={handlePageChange}
-            color="primary"
-          />
+          {filteredData.length > itemsPerPage && (
+            <Box display="flex" justifyContent="center" mt={2}>
+              <Pagination
+                count={totalPages}
+                page={currentPage.IRT}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Box>
+          )}
         </Box>
-      )}
-    </>
+
+        {/* Tab Panel 2 */}
+        <Box>
+          <Grid2 container spacing={1}>
+            {paginatedData.map((market) => (
+              <Grid2 key={market.id} size={{ xs: 12, sm: 6, lg: 4 }}>
+                <MarketItem item={market} />
+              </Grid2>
+            ))}
+          </Grid2>
+          {filteredData.length > itemsPerPage && (
+            <Box display="flex" justifyContent="center" mt={2}>
+              <Pagination
+                count={totalPages}
+                page={currentPage.USDT}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Box>
+          )}
+        </Box>
+      </SwipeableViews>
+    </div>
   );
 };
 
