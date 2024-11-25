@@ -106,6 +106,26 @@ const Orders = () => {
                 <OrderItem item={order} />
               </Grid2>
             ))}
+            <Grid2 size={12}>
+              <Typography color="textPrimary">
+                remain sum:{" "}
+                {buyData?.orders
+                  ?.slice(0, 10)
+                  ?.reduce((a, b) => +a + +b.remain, 0)}
+              </Typography>
+              <Typography color="textPrimary">
+                value sum:{" "}
+                {buyData?.orders
+                  ?.slice(0, 10)
+                  ?.reduce((a, b) => +a + +b.value, 0)}
+              </Typography>
+              <Typography color="textPrimary">
+                average sum:{" "}
+                {buyData?.orders
+                  ?.slice(0, 10)
+                  ?.reduce((a, b) => +a + +b.price, 0) / 10}
+              </Typography>
+            </Grid2>
           </Grid2>
         </Box>
 
@@ -122,7 +142,22 @@ const Orders = () => {
             ))}
             <Grid2 size={12}>
               <Typography color="textPrimary">
-                Last 10 buy orders total amount:
+                remain sum:{" "}
+                {SaleData?.orders
+                  ?.slice(0, 10)
+                  ?.reduce((a, b) => +a + +b.remain, 0)}
+              </Typography>
+              <Typography color="textPrimary">
+                value sum:{" "}
+                {SaleData?.orders
+                  ?.slice(0, 10)
+                  ?.reduce((a, b) => +a + +b.value, 0)}
+              </Typography>
+              <Typography color="textPrimary">
+                average sum:{" "}
+                {SaleData?.orders
+                  ?.slice(0, 10)
+                  ?.reduce((a, b) => +a + +b.price, 0) / 10}
               </Typography>
             </Grid2>
           </Grid2>
@@ -139,6 +174,13 @@ const Orders = () => {
                 <TransactionItem item={order} />
               </Grid2>
             ))}
+            <Grid2 size={12}>
+              {/* <Typography color="textPrimary">remain sum: {transactionData?.reduce((a, b) => +a + +b., 0)}</Typography> */}
+              <Typography color="textPrimary">
+                value sum: {transactionData?.reduce((a, b) => +a + +b.value, 0)}
+              </Typography>
+              <Typography color="textPrimary">remain sum:</Typography>
+            </Grid2>
           </Grid2>
         </Box>
       </SwipeableViews>
